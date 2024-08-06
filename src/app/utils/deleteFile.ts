@@ -26,9 +26,10 @@ const listFilesInBucket = async (bucketName: string) => {
 const deleteFileFromStorage = async (bucketName: string, filePath: string) => {
   try {
     console.log('Starting file deletion...');
-
     console.log('Listing files before deletion...');
+    
     const filesBeforeDeletion = await listFilesInBucket(bucketName);
+    
     console.log('File list before deletion:', filesBeforeDeletion);
 
     const { data, error } = await supabase

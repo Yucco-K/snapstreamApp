@@ -1,18 +1,12 @@
 'use client';
-// import dotenv from 'dotenv';
-// dotenv.config();
 
 import { useState, useEffect } from 'react';
-import useAuth from './useAuth';
 import PostList from './components/PostList';
 import { createClient, Session } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { supabaseAdmin as supabase } from '../../lib/supabaseAdmin';
 import styles from './styles/Spinner.module.css';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-
-// const dynamic = 'force-dynamic';
-// export { dynamic };
 
 export default function Page() {
   const [session, setSession] = useState<Session | null>(null);
@@ -42,8 +36,6 @@ export default function Page() {
 
     getSession();
   }, [supabaseClient.auth]);
-
-  useAuth();
 
   return (
     <div className="max-w-4xl mx-auto p-6 shadow-md rounded-lg bg-neutral-100">

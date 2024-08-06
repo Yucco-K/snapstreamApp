@@ -1,14 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import useAuth from '../useAuth';
 import { supabaseAdmin as supabase } from '../../../lib/supabaseAdmin';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Image from 'next/image';
-import AvatarUploadModal from './AvatarUploadModal';
 
 const UserProfile = () => {
-  useAuth();
   const [nickname, setNickname] = useState('');
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);

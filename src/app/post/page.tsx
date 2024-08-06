@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { createClientComponentClient, Session } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
-import useAuth from '../useAuth';
 import UserProfile from '../components/UserProfile';
 import FileUploadWithPost from '../components/FileUploadWithPost';
 import AvatarUploadPage from '../components/AvatarUploadPage';
@@ -43,8 +42,6 @@ function PostPage() {
 
     getSession();
   }, [router, supabase]);
-
-  useAuth();
 
   if (loading) {
     return <p className="text-center text-gray-600">Loading...</p>; // ローディング表示

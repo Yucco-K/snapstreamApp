@@ -1,4 +1,3 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import supabase from '../../../lib/supabase';
 
 

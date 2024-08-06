@@ -5,7 +5,6 @@ import { supabaseAdmin as supabase } from '../../../lib/supabaseAdmin';
 import DeleteUser from './DeleteUser';
 import { createClientComponentClient, Session, SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
-import useAuth from '../useAuth';
 import styles from '../styles/Spinner.module.css';
 
 export default function ListUsers() {
@@ -29,8 +28,6 @@ export default function ListUsers() {
     };
     getSession();
   }, [supabaseClient.auth]);
-
-  useAuth();
 
   useEffect(() => {
     const fetchUsers = async () => {

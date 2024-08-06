@@ -128,6 +128,14 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
         setFilePreview(fileURL);
 
       } else if (fileType === 'youtube' && youtubeURL) {
+
+        const isValidYoutubeURL = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/.test(youtubeURL);
+        if (!isValidYoutubeURL) {
+          setUploadError('URLがYouTubeの形式ではありません');
+          setIsLoading(false);
+          return;
+        }
+
         const embedUrl = youtubeURL.replace("watch?v=", "embed/");
 
         setUploadSuccess('YouTube動画のURLが設定されました');

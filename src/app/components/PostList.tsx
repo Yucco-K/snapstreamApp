@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import useAuth from '../useAuth';
 import { Session } from '@supabase/supabase-js';
 import styles from '../styles/Spinner.module.css';
 import Image from 'next/image';
@@ -55,8 +54,6 @@ const PostList: React.FC = () => {
 
   const supabaseClient = createClientComponentClient();
   const postRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-
-  useAuth();
 
   const fetchCategories = useCallback(async () => {
     const { data, error } = await supabaseClient
