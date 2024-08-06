@@ -1,0 +1,63 @@
+/* ページ全体に適用されるスタイルを定義する */
+/* ヘッダーの高さを考慮して、padding-topを80pxに設定 */
+body {
+  padding-top: 80px; /* ヘッダーの高さに合わせて調整 */
+  background-color: #f8f9fa; /* 背景色を柔らかくする */
+}
+
+.video-responsive {
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+}
+
+.video-responsive iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.responsive-iframe {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 ratio (9 / 16 = 0.5625) */
+}
+
+.responsive-iframe iframe,
+.responsive-iframe video  {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* @media (max-width: 768px) {
+  .responsive-iframe {
+    width: 100%;
+    height: auto;
+  }
+} */
+
+@media (max-width: 768px) {
+  /* スマホ向けのスタイル */
+  .responsive-iframe {
+    padding-bottom: 56.25%; /* 16:9 ratioを保持 */
+  }
+
+  .responsive-iframe iframe,
+  .responsive-iframe video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+

@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"], // 使用するライブラリ
+    "allowJs": true, // JSファイルを許可
+    "skipLibCheck": true, // ライブラリの型チェックをスキップ
+    "strict": true, // 厳密な型チェック
+    "noEmit": true, // コンパイル時にファイルを出力しない
+    "esModuleInterop": true, // ESモジュールとCommonJSモジュールの互換性
+    "module": "esnext", // モジュールシステム
+    "moduleResolution": "bundler", // モジュール解決方法
+    "resolveJsonModule": true, // JSONモジュールの解決を許可
+    "isolatedModules": true, // 各ファイルを独立したモジュールとして扱う
+    "jsx": "preserve", // JSXをそのまま残す
+    "incremental": true, // 増分コンパイルを有効にする
+    "target": "es2015", // ES2015以上を指定
+    "downlevelIteration": true, // downlevel iterationを有効にする
+    "plugins": [
+      {
+        "name": "next" // Next.js用のプラグイン
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"] // エイリアスの設定
+    }
+  },
+  "include": [
+    "next-env.d.ts", // Next.jsの環境設定ファイル
+    "**/*.ts", // 全てのTSファイルを含む
+    "**/*.tsx", // 全てのTSXファイルを含む
+    ".next/types/**/*.ts" // Next.jsによって生成される型定義ファイルを含む
+  ],
+  "exclude": [
+      "node_modules" // node_modulesディレクトリを除外
+    ]
+  }
