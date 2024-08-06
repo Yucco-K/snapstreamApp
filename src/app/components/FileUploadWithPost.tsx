@@ -21,7 +21,8 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
   const [comment, setComment] = useState('');
   const [postError, setPostError] = useState<string | null>(null);
   const [postSuccess, setPostSuccess] = useState<string | null>(null);
-  const [category, setCategory] = useState<string | null>(null);
+  // Initializing category with an empty string instead of null
+  const [category, setCategory] = useState<string>('');
   const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
   const [isUploaded, setIsUploaded] = useState(false);
 
@@ -29,6 +30,7 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
 
   const MAX_FILE_SIZE_MB = 50; // 50MB
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+  const SUPPORTED_VIDEO_FORMATS = ['mp4', 'mov']; // 対応する動画形式
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategoryId = event.target.value;
@@ -48,6 +50,18 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
+
+      setUploadError('');  // 新しいファイルが選択されたときにエラーメッセージをクリア
+
+      const fileExtension = selectedFile.name.split('.').pop()?.toLowerCase();
+
+      if (!fileExtension || !SUPPORTED_VIDEO_FORMATS.includes(fileExtension)) {
+        setUploadError(`サポートされていないファイル形式です。対応形式: ${SUPPORTED_VIDEO_FORMATS.join(', ')}`);
+        setFile(null);
+        setFilePreview(null);
+        return;
+      }
+
       if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
         setUploadError(`ファイルサイズは最大 ${MAX_FILE_SIZE_MB}MB までです。`);
         setFile(null);
@@ -296,10 +310,9 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
           <form onSubmit={handlePostSubmit} className="mt-8">
             {/* <h2 className="text-lg font-bold mb-4 text-center">投稿情報</h2> */}
             <label htmlFor="category" className="block text-sm font-bold text-green mb-3 text-left mt-4">カテゴリ: </label>
-
             <select
               id="category"
-              value={category || ''}
+              value={category ?? ''}
               onChange={handleCategoryChange}
               className="mt-1 block w-full pl-3 pr-10 mb-5 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-gray-100"
             >
