@@ -507,7 +507,7 @@ const PostList: React.FC = () => {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 fill-current text-red-500 transition-transform transform hover:scale-125"
+                  className="h-4 w-4 fill-current text-yellow-500 transition-transform transform hover:scale-125"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
