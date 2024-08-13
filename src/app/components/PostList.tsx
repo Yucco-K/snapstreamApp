@@ -50,7 +50,7 @@ const PostList: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
-  const [isFileDeleted, setIsFileDeleted] = useState<Set<string>>(new Set()); // 追加
+  const [isFileDeleted, setIsFileDeleted] = useState<Set<string>>(new Set());
 
   const supabaseClient = createClientComponentClient();
   const postRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -92,7 +92,6 @@ const PostList: React.FC = () => {
     } else {
       // 各ポストに対して、コメント内のuser_idを使ってプロフィール情報を取得する
       const postsWithProfile = await Promise.all(data.map(async (post: any) => {
-        // コメントのユーザー情報を取得する
         const commentsWithProfile = await Promise.all(post.comments.map(async (comment: any) => {
           const { data: commentProfile } = await supabaseClient
             .from('profile')
@@ -308,7 +307,6 @@ const PostList: React.FC = () => {
             return;
           }
 
-          // likedPostsの更新方法を変更
           const updatedLikedPosts = new Set(likedPosts);
           updatedLikedPosts.add(postId);
           setLikedPosts(updatedLikedPosts);
@@ -359,11 +357,11 @@ const PostList: React.FC = () => {
   const handleDeleteFile = async (postId: string, fileUrl: string) => {
     try {
 
-      console.log('Deleting file with URL:', fileUrl); // デバッグ用ログ
+      console.log('Deleting file with URL:', fileUrl);
 
       const filePath = fileUrl.split('/').slice(-2).join('/').split('?')[0];
 
-      console.log('Extracted file path:', filePath); // デバッグ用ログ
+      console.log('Extracted file path:', filePath);
 
       const { data: fileData, error: fetchError } = await supabaseClient
         .storage
@@ -423,7 +421,7 @@ const PostList: React.FC = () => {
       ) : (
         <>
           <div className="bg-white shadow-md font-bold flex flex-col items-center pb-10 pt-20">
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700">カテゴリ</label>
+            <label htmlFor="category" className="block text-sm font-medium text-gray-700"></label>
             <select
               id="category"
               name="category"
@@ -431,7 +429,7 @@ const PostList: React.FC = () => {
               className=" block w-1/2 pl-3 pr-10 py-2 mt-3 mb-3 ml-3 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-gray-100"
             >
               <option value="">カテゴリ</option>
-              <option value="">全てのカテゴリ</option> {/* 全てのカテゴリーを選択するオプションを追加 */}
+              <option value="">全てのカテゴリ</option>
 
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
@@ -502,7 +500,6 @@ const PostList: React.FC = () => {
               <button
                 onClick={() => handleLike(post.id)}
                 disabled={likedPosts.has(post.id) || post.created_by === session?.user.id}
-                // className={`p-2 mt-4 ${likedPosts.has(post.id) || post.created_by === session?.user.id ? 'bg-gray-400' : 'bg-green-500'} text-white rounded-md flex items-center`}
                 className={`p-2 mt-4 flex items-center`}
               >
                 <svg
