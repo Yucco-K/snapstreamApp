@@ -30,14 +30,14 @@ function HeaderUpload() {
         </li>
       </ul>
       <ul className="w-fit mx-auto flex gap-10 py-2">
-      <li className="text-center cursor-pointer">
+      {/* <li className="text-center cursor-pointer">
           <Link href="/category">
           <span className="text-l inline-block place-self-center p-2 text-xs">
               <FontAwesomeIcon icon={faList} className="text-gray-500 text-xs" />
             </span>
             <span className="block text-sm font-bold text-xs">Categories</span>
           </Link>
-        </li>
+        </li> */}
         <li className="text-center cursor-pointer">
             <Link href="/">
               <span className="text-l inline-block place-self-center p-2 text-xs">

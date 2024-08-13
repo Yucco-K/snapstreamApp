@@ -18,7 +18,7 @@ const AvatarUploadPage = () => {
         onClick={() => setModalOpen(true)}
         className="px-6 py-3 bg-blue-300 text-gray-700 font-bold rounded shadow-md hover:bg-blue-400 transition-transform transform hover:scale-105"
       >
-        アバターをアップロードまたは変更
+        アバターを登録または変更する
       </button>
       <AvatarUploadModal
         isOpen={modalOpen}

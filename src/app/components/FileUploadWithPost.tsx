@@ -106,9 +106,9 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
     clearMessages();
     setTitle('');
     setComment('');
-    setUploadSuccess(''); // アップロード成功メッセージのリセット
-    setUploadError(''); // アップロードエラーメッセージのリセット
-    setIsLoading(false); // 追加：アップロードボタンをリセット
+    setUploadSuccess('');
+    setUploadError('');
+    setIsLoading(false); // ファイルタイプが変更されたときにローディングステートをリセット
 
     // ファイル選択をクリアするために、input要素の値をリセット
     const fileInput = document.getElementById('file') as HTMLInputElement;
@@ -227,7 +227,7 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
 
   return (
     <div className="w-full max-w-3xl mx-auto p-4">
-      <h1 className="text-2xl text-center font-bold mb-6">動画をアップロード</h1>
+      <h1 className="text-2xl text-center font-bold mb-6">動画を投稿する</h1>
         <>
           <form onSubmit={handleUploadSubmit}>
             <div className="mb-6">
@@ -298,7 +298,7 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
                 disabled={isLoading}
                 className={`p-2 w-1/2 mt-4 bg-green-300 text-gray-900 font-bold rounded mx-auto ${isLoading ? 'bg-gray-500' : 'hover:bg-green-300'}`}
               >
-                {isLoading ? 'アップロード中...' : 'アップロード'}
+                {isLoading ? 'アップロードまたはURL設定中...' : 'アップロードまたはURL設定'}
               </button>
             </div>
             <div className='my-12'>
@@ -308,7 +308,6 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
           </form>
 
           <form onSubmit={handlePostSubmit} className="mt-8">
-            {/* <h2 className="text-lg font-bold mb-4 text-center">投稿情報</h2> */}
             <label htmlFor="category" className="block text-sm font-bold text-green mb-3 text-left mt-4">カテゴリ: </label>
             <select
               id="category"
@@ -344,7 +343,7 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
                 className="p-2 w-1/2 mt-10 bg-green-300 text-gray-900 font-bold rounded hover:bg-green-300"
                 disabled={isLoading}
               >
-                投稿する
+                投稿
               </button>
             </div>
 
