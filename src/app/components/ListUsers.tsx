@@ -24,7 +24,7 @@ export default function ListUsers() {
     const getSession = async () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
       setSession(session);
-      console.log('Session:', session);
+      // console.log('Session:', session);
     };
     getSession();
   }, [supabaseClient.auth]);
@@ -33,21 +33,19 @@ export default function ListUsers() {
     const fetchUsers = async () => {
       setIsLoading(true);
       try {
-        // Supabase Admin API を使用してユーザーリストを取得
         const { data, error } = await supabase.auth.admin.listUsers();
 
         if (error) {
           alert(`Failed to list users: ${error.message}`);
         } else {
           setUsers(data.users);
-          setFilteredUsers(data.users); // 初期化時に全ユーザーをセット
+          setFilteredUsers(data.users);
         }
 
-        // profile テーブルから追加情報を取得
         const { data: profileData, error: profileError } = await supabaseClient
           .from('profile')
           .select('id, role, nickname, created_at')
-          .order('created_at', { ascending: false }); // created_atで降順に並び替え
+          .order('created_at', { ascending: false });
 
         if (profileError) {
           console.error('Error fetching profiles:', profileError);
@@ -97,10 +95,10 @@ export default function ListUsers() {
   };
 
   useEffect(() => {
-    const searchWords = searchQuery.toLowerCase().trim().split(/\s+/); // 修正箇所: スペースで分割してワードの配列を取得
+    const searchWords = searchQuery.toLowerCase().trim().split(/\s+/); // スペースで分割してワードの配列を取得
 
     const filtered = users.filter(user => {
-      const userProfile = remarks[user.id] || { role: '未設定', nickname: '名無し', created_at: '' }; // デフォルト値を設定
+      const userProfile = remarks[user.id] || { role: '未設定', nickname: '名無し', created_at: '' };
 
       // 各ワードがID、メール、権限、ニックネーム、登録日に含まれているかをチェック
       return searchWords.every((word) =>
@@ -127,6 +125,10 @@ export default function ListUsers() {
   const startIndex = (currentPage - 1) * recordsPerPage;
   const selectedUsers = filteredUsers.slice(startIndex, startIndex + recordsPerPage);
   const totalPages = Math.ceil(filteredUsers.length / recordsPerPage);
+
+  function onDeleteComments(userId: string): Promise<void> {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <div className={`w-full mt-20`}>
@@ -170,7 +172,6 @@ export default function ListUsers() {
                   </li>
                 ))}
               </ul>
-              {/* <div className="mt-4 mb-3 flex justify-center space-x-2"> */}
               <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-md flex justify-center text-xs"> {/* fixedを追加して固定表示 */}
                 <ul className="flex space-x-2 mt-3">
                   {Array.from({ length: totalPages }, (_, index) => (
@@ -186,7 +187,6 @@ export default function ListUsers() {
                   ))}
                 </ul>
               </nav>
-              {/* </div> */}
             </>
           )}
         </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Session } from '@supabase/supabase-js';
 import styles from '../styles/Spinner.module.css';
+import avatarStyles from '../styles/Avatar.module.css';
 import Image from 'next/image';
 interface Category {
   id: string; // UUID
@@ -519,7 +520,7 @@ const PostList: React.FC = () => {
               <p className="text-xs font-bold my-3 ml-2">投稿日時: {post.created_date} {post.created_time ? post.created_time.slice(0, 5) : ''}</p>
               <div className="flex items-center mb-3">
               {post.avatar_url && (
-                <Image src={post.avatar_url} alt={`${post.nickname}のアバター`} width={50} height={50} className="rounded-full" />
+                <Image src={post.avatar_url} alt={`${post.nickname}のアバター`} width={50} height={50} className={avatarStyles.avatar} />
               )}
               <p className="text-xs font-bold ml-2">投稿者: {post.nickname || 'Unknown'} さん</p>
             </div>
@@ -529,7 +530,7 @@ const PostList: React.FC = () => {
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
                       <div className="items-start">
                         {comment.avatar_url && (
-                          <Image src={comment.avatar_url} alt={`${comment.nickname}のアバター`} width={30} height={30} className="rounded-full" />
+                          <Image src={comment.avatar_url} alt={`${comment.nickname}のアバター`} width={30} height={30} className={avatarStyles.avatarsmall} />
                         )}
                           <p className="text-xs font-bold  mx-2 my-2">{comment.nickname}: </p>
                         <p className="text-sm font-bold  mx-2 my-2">{comment.comment}</p>

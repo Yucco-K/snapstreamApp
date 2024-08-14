@@ -28,7 +28,11 @@ import { useEffect, useState } from 'react';
 
           if (profileError) {
             console.error('Error fetching profile:', profileError);
-          } else if (profileData.role === 'admin') {
+            if (profileError.code === 'PGRST116') {
+              // PGRST116: The result contains 0 rows エラーを検出し、スキップする
+              return;
+            }
+          } else if (profileData && profileData.role === 'admin') {
             setIsAdmin(true);
           }
         }

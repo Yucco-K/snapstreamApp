@@ -9,9 +9,58 @@ type DeleteUserProps = {
   onDelete: (userId: string) => void;
 };
 
-export default function DeleteUser({ userId, onDelete }: DeleteUserProps) {
+export const DeleteUser: React.FC<DeleteUserProps> = ({ userId, onDelete }) => {
   const handleDelete = async () => {
     try {
+      // ユーザーが投稿を持っているかどうかを確認
+      const { data: posts, error: postError } = await supabase
+        .from('post')
+        .select('id')
+        .eq('created_by', userId);
+
+      if (postError) {
+        console.error('Error fetching posts:', postError.message);
+        alert(`投稿の取得中にエラーが発生しました: ${postError.message}`);
+        return;
+      }
+
+      if (posts && posts.length > 0) {
+        alert('先に投稿を削除してください。');
+        return;
+      }
+
+      // コメントを削除
+      const onDeleteComments = async (userId: string) => {
+        try {
+          console.log('UserId:', userId); // userIdをコンソールに出力
+
+          const { data: postsToUpdate, error } = await supabase
+            .from('post')
+            .select('id, comments')
+            .filter('comments', 'cs', JSON.stringify([{ user_id: userId }]));
+
+          if (error) {
+            console.error('Error fetching posts to update:', error.message);
+            return;
+          }
+
+          console.log('Posts to update:', postsToUpdate); // postsToUpdateのリストをコンソールに出力
+
+          for (const post of postsToUpdate || []) {
+            const updatedComments = post.comments.filter((comment: any) => comment.user_id !== userId);
+
+            await supabase
+              .from('post')
+              .update({ comments: updatedComments })
+              .eq('id', post.id);
+          }
+        } catch (error) {
+          console.error('Error deleting comments:', (error as any).message);
+        }
+      };
+
+      await onDeleteComments(userId);
+
       const { error } = await supabase.auth.admin.deleteUser(userId);
 
       if (error) {
@@ -34,4 +83,6 @@ export default function DeleteUser({ userId, onDelete }: DeleteUserProps) {
       削除
     </button>
   );
-}
+};
+
+export default DeleteUser;

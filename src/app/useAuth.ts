@@ -16,7 +16,7 @@ const useAuth = () => {
         router.push('/login');
       } else {
         const { user } = session;
-        console.log('User object:', user);
+        // console.log('User object:', user);
 
         // プロフィールを取得してログに出力
         const { data: profile, error: profileError } = await supabase
@@ -27,8 +27,8 @@ const useAuth = () => {
 
         if (profileError) {
           console.error('Profile fetch error:', profileError);
-        } else {
-          console.log('Profile fetched:', profile);
+        // } else {
+        //   console.log('Profile fetched:', profile);
         }
       }
     };
