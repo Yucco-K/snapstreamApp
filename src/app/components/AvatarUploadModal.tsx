@@ -83,21 +83,39 @@ const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({ isOpen, onClose, 
       const fileName = `${Date.now()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      let { error: uploadError } = await supabaseClient.storage
-        .from('avatars')
-        .upload(filePath, file);
 
-      if (uploadError) {
-        throw uploadError;
-      }
+    // 現在のアバターURLを取得
+    const { data: currentProfile, error: fetchProfileError } = await supabaseClient
+      .from('profile')
+      .select('avatar_url')
+      .eq('id', session?.user?.id)
+      .single();
 
-      const { data } = supabaseClient.storage
-        .from('avatars')
-        .getPublicUrl(filePath);
-      const publicUrl = data.publicUrl;
+    if (fetchProfileError) {
+      throw fetchProfileError;
+    }
 
-      if (!session || !session.user) throw new Error("User is not authenticated");
+    const oldAvatarUrl = currentProfile?.avatar_url;
 
+    console.log(oldAvatarUrl);
+
+      // 新しい画像をアップロード
+    let { error: uploadError } = await supabaseClient.storage
+      .from('avatars')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { data } = supabaseClient.storage
+      .from('avatars')
+      .getPublicUrl(filePath);
+    const publicUrl = data.publicUrl;
+
+    if (!session || !session.user) throw new Error("User is not authenticated");
+
+      // プロフィールを新しいアバターURLで更新
       const { error: updateError } = await supabaseClient
         .from('profile')
         .update({ avatar_url: publicUrl })
@@ -105,6 +123,19 @@ const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({ isOpen, onClose, 
 
       if (updateError) {
         throw updateError;
+      }
+
+      // 旧アバターを削除
+      if (oldAvatarUrl) {
+        const oldFilePath = oldAvatarUrl.split('/').pop();
+        console.log(oldFilePath);
+        const { error: deleteError } = await supabaseClient.storage
+          .from('avatars')
+          .remove([oldFilePath]);
+
+        if (deleteError) {
+          throw deleteError;
+        }
       }
 
       onAvatarUploaded(publicUrl);
@@ -139,13 +170,13 @@ const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({ isOpen, onClose, 
 
       // 既存のアバターを削除
       if (existingAvatarUrl) {
-        const filePath = existingAvatarUrl.split('/').pop(); // 修正箇所: 'avatar/' を含めずにファイル名のみ取得
+        const filePath = existingAvatarUrl.split('/').pop(); //'avatar/' を含めずにファイル名のみ取得
 
         // console.log(`Deleting avatar: ${filePath}`); // 削除するファイルパスを出力
 
         const { error: deleteError } = await supabase.storage
           .from('avatars')
-          .remove([filePath]); // 修正箇所: 'avatars/' を含めずにファイル名のみ設定
+          .remove([filePath]); // avatars/' を含めずにファイル名のみ設定
 
         if (deleteError) {
           throw deleteError;

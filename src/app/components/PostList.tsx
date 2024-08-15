@@ -30,7 +30,7 @@ export interface Post {
   avatar_url?: string;
   file_url?: string | null;
   category_id: string;
-  isFileDeleted?: boolean;  // Add this line
+  isFileDeleted?: boolean;
 }
 
 // YouTubeのURLかどうかを判定する関数
@@ -68,7 +68,7 @@ const PostList: React.FC = () => {
     }
   }, [supabaseClient]);
 
-  const POSTS_PER_PAGE = 2; // Set an appropriate value for the number of posts per page
+  const POSTS_PER_PAGE = 2;
 
   const fetchPosts = useCallback(async (page: number, categoryId: string | null) => {
     setIsLoading(true);
@@ -77,7 +77,7 @@ const PostList: React.FC = () => {
 
     let query = supabaseClient
       .from('post')
-      .select('*, profile (nickname, avatar_url)', { count: 'exact' }) // profile テーブルから nickname と avatar_url を取得
+      .select('*, profile (nickname, avatar_url)', { count: 'exact' })
       .order('created_date', { ascending: false })
       .order('created_time', { ascending: false })
       .range(from, to);
@@ -91,7 +91,6 @@ const PostList: React.FC = () => {
     if (error) {
       console.error('Error fetching posts:', error);
     } else {
-      // 各ポストに対して、コメント内のuser_idを使ってプロフィール情報を取得する
       const postsWithProfile = await Promise.all(data.map(async (post: any) => {
         const commentsWithProfile = await Promise.all(post.comments.map(async (comment: any) => {
           const { data: commentProfile } = await supabaseClient
@@ -330,12 +329,25 @@ const PostList: React.FC = () => {
   const handleDelete = async (postId: string) => {
     try {
       const postToDelete = posts.find(post => post.id === postId);
-      if (postToDelete && !postToDelete.isFileDeleted && !isYouTubeUrl(postToDelete.file_url || '')) {
+      // 投稿が見つからない場合はエラーを表示して処理を中断
+      if (!postToDelete) {
+        console.error('投稿が見つかりませんでした');
+        return;
+      }
+
+        // 投稿が存在し、ファイルが削除されておらず、ファイルURLがYouTubeのURLでない場合のチェック
+      if (
+        postToDelete &&
+        !postToDelete.isFileDeleted &&
+        postToDelete.file_url && // ファイルURLが存在するかをチェック
+        !isYouTubeUrl(postToDelete.file_url)
+      ) {
         alert('ファイルを削除してから投稿を削除してください。');
         return;
       }
 
-      console.log('Deleting post with ID:', postId);
+    console.log('Deleting post with ID:', postId);
+
       const { error } = await supabaseClient
         .from('post')
         .delete()
@@ -379,7 +391,7 @@ const PostList: React.FC = () => {
         return;
       }
 
-       // 直接ファイルを削除
+    // 直接ファイルを削除
     const { error: storageError } = await supabaseClient
       .storage
       .from('post_files')
@@ -388,6 +400,17 @@ const PostList: React.FC = () => {
     if (storageError) {
       console.error('Error deleting file:', storageError.message);
       throw storageError;
+    }
+
+    // ファイルが削除されたことをデータベースに保存
+    const { error: updateError } = await supabaseClient
+    .from('post')
+    .update({ isfiledeleted: true, file_url: null })
+    .eq('id', postId);
+
+    if (updateError) {
+    console.error('Error updating post:', updateError.message);
+    throw updateError;
     }
 
     alert('ファイルが削除されました');
