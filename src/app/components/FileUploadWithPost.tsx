@@ -21,16 +21,15 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
   const [comment, setComment] = useState('');
   const [postError, setPostError] = useState<string | null>(null);
   const [postSuccess, setPostSuccess] = useState<string | null>(null);
-  // Initializing category with an empty string instead of null
   const [category, setCategory] = useState<string>('');
   const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
   const [isUploaded, setIsUploaded] = useState(false);
 
   const categories = useCategories();
 
-  const MAX_FILE_SIZE_MB = 50; // 50MB
+  const MAX_FILE_SIZE_MB = 50;
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
-  const SUPPORTED_VIDEO_FORMATS = ['mp4', 'mov']; // 対応する動画形式
+  const SUPPORTED_VIDEO_FORMATS = ['mp4', 'mov'];
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategoryId = event.target.value;
@@ -51,7 +50,7 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
 
-      setUploadError('');  // 新しいファイルが選択されたときにエラーメッセージをクリア
+      setUploadError('');
 
       const fileExtension = selectedFile.name.split('.').pop()?.toLowerCase();
 
@@ -82,7 +81,6 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
   };
 
   const handleFileTypeChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
-    // ファイル削除のトランザクション処理
     if (filePreview && fileType === 'video') {
       const fileName = filePreview.split('/').pop()?.split('?')[0];
       if (fileName) {
@@ -108,9 +106,8 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
     setComment('');
     setUploadSuccess('');
     setUploadError('');
-    setIsLoading(false); // ファイルタイプが変更されたときにローディングステートをリセット
+    setIsLoading(false);
 
-    // ファイル選択をクリアするために、input要素の値をリセット
     const fileInput = document.getElementById('file') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -138,14 +135,14 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
         console.log('公開URL:', fileURL);
 
         setUploadSuccess('動画のアップロードに成功しました');
-        setIsUploaded(true);  // アップロード成功後に更新
+        setIsUploaded(true);
         setFilePreview(fileURL);
 
       } else if (fileType === 'youtube' && youtubeURL) {
 
         const isValidYoutubeURL = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/.test(youtubeURL);
         if (!isValidYoutubeURL) {
-          setUploadError('URLがYouTubeの形式ではありません');
+          setUploadError('URLがYouTubeの形式でないか、再生出来ない形式です');
           setIsLoading(false);
           return;
         }
@@ -153,7 +150,7 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
         const embedUrl = youtubeURL.replace("watch?v=", "embed/");
 
         setUploadSuccess('YouTube動画のURLが設定されました');
-        setIsUploaded(true);  // アップロード成功後に更新
+        setIsUploaded(true);
         setFilePreview(embedUrl);
       }
     } catch (error: any) {
@@ -187,12 +184,10 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
       return;
     }
 
-    // 日本標準時（JST）で日時を取得
     const now = new Date();
     const jstDate = now.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo' });
     const jstTime = now.toLocaleTimeString('ja-JP', { timeZone: 'Asia/Tokyo', hour12: false });
 
-    // 投稿データを作成
     const postData = {
       title,
       comment,
@@ -219,7 +214,6 @@ const FileUploadWithPost: React.FC<FileUploadWithPostProps> = ({ session }) => {
     }
   };
 
-   // 変更箇所：動画IDを抽出する関数を追加
   const extractEmbedId = (url: string): string => {
     const videoIdMatch = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
     return videoIdMatch ? videoIdMatch[1] : '';

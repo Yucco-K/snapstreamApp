@@ -29,7 +29,6 @@ import { useEffect, useState } from 'react';
           if (profileError) {
             console.error('Error fetching profile:', profileError);
             if (profileError.code === 'PGRST116') {
-              // PGRST116: The result contains 0 rows エラーを検出し、スキップする
               return;
             }
           } else if (profileData && profileData.role === 'admin') {
@@ -60,7 +59,7 @@ import { useEffect, useState } from 'react';
         </li>
       </ul>
       <ul className="w-fit sm:w-fit mx-auto flex justify-around gap-10">
-        {/* {isAdmin && ( */}{/*管理者権限設定をコメントアウト */}
+        {/* {isAdmin && ( */}{/*管理者リンク設定をコメントアウト */}
           <li className="text-center cursor-pointer flex-1">
             <Link href="/users">
             <span className="text-l inline-block place-self-center p-2">

@@ -5,7 +5,7 @@ interface LikeButtonProps {
   postId: string;
   postOwnerId: string;
   userId: string;
-  refreshPosts: () => void; // リフレッシュ関数のプロパティを追加
+  refreshPosts: () => void;
 }
 
 const LikeButton: React.FC<LikeButtonProps> = ({ postId, postOwnerId, userId, refreshPosts }) => {
@@ -15,7 +15,6 @@ const LikeButton: React.FC<LikeButtonProps> = ({ postId, postOwnerId, userId, re
   const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
-    // 投稿のオーナーかどうかをチェック
     setIsOwner(postOwnerId === userId);
 
     const fetchLikeStatus = async () => {
@@ -49,7 +48,6 @@ const LikeButton: React.FC<LikeButtonProps> = ({ postId, postOwnerId, userId, re
     }
 
     if (existingLikes) {
-      // 既に「いいね」が押されている場合
       setIsLiked(true);
       return;
     }
@@ -80,12 +78,12 @@ const LikeButton: React.FC<LikeButtonProps> = ({ postId, postOwnerId, userId, re
 
       if (updateError) {
         console.error('Error updating post:', updateError);
-        refreshPosts(); // リフレッシュ関数を呼び出して投稿を再フェッチ
+        refreshPosts();
 
         return;
       }
 
-      refreshPosts(); // リフレッシュ関数を呼び出して投稿を再フェッチ
+      refreshPosts();
     } else {
       console.error('Error liking the post:', insertError);
     }

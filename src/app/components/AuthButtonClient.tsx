@@ -22,7 +22,7 @@ const AuthButtonClient = ({ initialSession, initialPosts }: { initialSession: Se
     };
 
     getSession();
-  }, [supabaseClient]); // supabaseを依存配列に追加
+  }, [supabaseClient]);
 
   const handleSignIn = async () => {
     const { error } = await supabase.auth.signInWithOAuth({

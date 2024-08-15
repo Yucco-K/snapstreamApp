@@ -33,7 +33,6 @@ export interface Post {
   isFileDeleted?: boolean;
 }
 
-// YouTubeのURLかどうかを判定する関数
 const isYouTubeUrl = (url: string): boolean => {
   return /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/.test(url);
 };
@@ -115,7 +114,7 @@ const PostList: React.FC = () => {
       }));
       setPosts(postsWithProfile);
       setFilteredPosts(postsWithProfile);
-      setTotalPages(Math.ceil((count ?? 0) / POSTS_PER_PAGE)); // countがundefinedの可能性に備えて (count ?? 0) を使用
+      setTotalPages(Math.ceil((count ?? 0) / POSTS_PER_PAGE));
       setIsLoading(false);
     }
   }, [supabaseClient]);
@@ -133,7 +132,7 @@ const PostList: React.FC = () => {
     const selectedCategoryName = categoryId ? categories.find(category => category.id === categoryId)?.name || null : 'ALL';
     setSelectedCategory(categoryId);
     setSelectedCategoryName(selectedCategoryName);
-    setCurrentPage(1);  // カテゴリ変更時にページをリセット
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page: number) => {
@@ -205,7 +204,6 @@ const PostList: React.FC = () => {
             alert('コメントが追加されました');
             await fetchPosts(currentPage, selectedCategory);
 
-            // コメント投稿後にその投稿の位置にスクロールする処理を追加
             setTimeout(() => {
               postRefs.current[postId]?.scrollIntoView({ behavior: 'smooth' });
             }, 0);
@@ -268,13 +266,13 @@ const PostList: React.FC = () => {
 
   const handleLike = async (postId: string) => {
     if (!session?.user || session.user.id === posts.find(post => post.id === postId)?.created_by) {
-      return; // 自分の投稿にはいいねを押せない
+      return;
     }
 
     const postToUpdate = posts.find(post => post.id === postId);
     if (postToUpdate) {
       const hasLiked = likedPosts.has(postId);
-      if (hasLiked) return; // すでにいいねを押している場合は何もしない
+      if (hasLiked) return;
 
       try {
         const jstDate = new Date().toLocaleDateString('ja-JP');
@@ -329,20 +327,18 @@ const PostList: React.FC = () => {
   const handleDelete = async (postId: string) => {
     try {
       const postToDelete = posts.find(post => post.id === postId);
-      // 投稿が見つからない場合はエラーを表示して処理を中断
       if (!postToDelete) {
         console.error('投稿が見つかりませんでした');
         return;
       }
 
-        // 投稿が存在し、ファイルが削除されておらず、ファイルURLがYouTubeのURLでない場合のチェック
       if (
         postToDelete &&
         !postToDelete.isFileDeleted &&
-        postToDelete.file_url && // ファイルURLが存在するかをチェック
+        postToDelete.file_url &&
         !isYouTubeUrl(postToDelete.file_url)
       ) {
-        alert('ファイルを削除してから投稿を削除してください。');
+        alert('先にファイルを削除してから投稿を削除してください。');
         return;
       }
 
@@ -391,7 +387,6 @@ const PostList: React.FC = () => {
         return;
       }
 
-    // 直接ファイルを削除
     const { error: storageError } = await supabaseClient
       .storage
       .from('post_files')
@@ -402,7 +397,6 @@ const PostList: React.FC = () => {
       throw storageError;
     }
 
-    // ファイルが削除されたことをデータベースに保存
     const { error: updateError } = await supabaseClient
     .from('post')
     .update({ isfiledeleted: true, file_url: null })

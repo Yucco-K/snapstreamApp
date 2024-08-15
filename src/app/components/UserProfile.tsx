@@ -17,7 +17,6 @@ const UserProfile = () => {
     if (session) {
       const { user } = session;
 
-      // プロフィール情報を取得
       const { data: profile } = await supabase
         .from('profile')
         .select('nickname, avatar_url')
@@ -57,7 +56,7 @@ const UserProfile = () => {
       ) : (
         <p>No Avatar available</p>
       )}
-      <span> {nickname ? `${nickname} さん ログイン中` : '名無しさん さんログイン中'} </span>
+      <span> {nickname ? `${nickname} さん ログイン中` : '名無しさん ログイン中'} </span>
     </div>
   );
 };

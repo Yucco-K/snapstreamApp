@@ -18,7 +18,6 @@ const useAuth = () => {
         const { user } = session;
         // console.log('User object:', user);
 
-        // プロフィールを取得してログに出力
         const { data: profile, error: profileError } = await supabase
           .from('profile')
           .select('id, nickname')

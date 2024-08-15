@@ -14,7 +14,7 @@ export const dynamic = 'auto';
 function PostPage() {
   const [session, setSession] = useState<Session | null>(null);
   const [nickname, setNickname] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true); // ローディング状態を管理
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const supabase = createClientComponentClient();
 
@@ -44,7 +44,7 @@ function PostPage() {
   }, [router, supabase]);
 
   if (loading) {
-    return <p className="text-center text-gray-600">Loading...</p>; // ローディング表示
+    return <p className="text-center text-gray-600">Loading...</p>;
   }
 
   return (

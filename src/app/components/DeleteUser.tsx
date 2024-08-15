@@ -12,7 +12,6 @@ type DeleteUserProps = {
 export const DeleteUser: React.FC<DeleteUserProps> = ({ userId, onDelete }) => {
   const handleDelete = async () => {
     try {
-          // ユーザーのprofileを取得してavatar_urlが設定されているか確認
           const { data: profile, error: profileError } = await supabase
           .from('profile')
           .select('avatar_url')
@@ -30,7 +29,6 @@ export const DeleteUser: React.FC<DeleteUserProps> = ({ userId, onDelete }) => {
           return;
         }
 
-        // ユーザーが投稿を持っているかどうかを確認
       const { data: posts, error: postError } = await supabase
         .from('post')
         .select('id')
@@ -47,10 +45,9 @@ export const DeleteUser: React.FC<DeleteUserProps> = ({ userId, onDelete }) => {
         return;
       }
 
-      // コメントを削除
       const onDeleteComments = async (userId: string) => {
         try {
-          console.log('UserId:', userId); // userIdをコンソールに出力
+          console.log('UserId:', userId);
 
           const { data: postsToUpdate, error } = await supabase
             .from('post')
@@ -62,7 +59,7 @@ export const DeleteUser: React.FC<DeleteUserProps> = ({ userId, onDelete }) => {
             return;
           }
 
-          console.log('Posts to update:', postsToUpdate); // postsToUpdateのリストをコンソールに出力
+          // console.log('Posts to update:', postsToUpdate);
 
           for (const post of postsToUpdate || []) {
             const updatedComments = post.comments.filter((comment: any) => comment.user_id !== userId);
@@ -82,16 +79,16 @@ export const DeleteUser: React.FC<DeleteUserProps> = ({ userId, onDelete }) => {
       const { error } = await supabase.auth.admin.deleteUser(userId);
 
       if (error) {
-        alert(`Failed to delete user: ${error.message}`);
+        alert(`ユーザーの削除に失敗しました: ${error.message}`);
       } else {
-        alert('User deleted successfully');
-        onDelete(userId); // リストからユーザーを削除
+        alert('ユーザーを削除しました');
+        onDelete(userId);
       }
     } catch (error) {
       if (error instanceof Error) {
-        alert(`Failed to delete user: ${error.message}`);
+        alert(`ユーザーの削除に失敗しました: ${error.message}`);
       } else {
-        alert('Failed to delete user: An unknown error occurred');
+        alert('ユーザーの削除に失敗しました: An unknown error occurred');
       }
     }
   };

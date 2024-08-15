@@ -85,7 +85,7 @@ export default function ListUsers() {
 
     if (error) {
       console.error('Error updating role:', error);
-      alert('Failed to update role. Please try again.');
+      alert('権限の更新に失敗しました. もう一度試してください.');
     } else {
       setRemarks(prevRemarks => ({
         ...prevRemarks,
@@ -95,12 +95,11 @@ export default function ListUsers() {
   };
 
   useEffect(() => {
-    const searchWords = searchQuery.toLowerCase().trim().split(/\s+/); // スペースで分割してワードの配列を取得
+    const searchWords = searchQuery.toLowerCase().trim().split(/\s+/);
 
     const filtered = users.filter(user => {
       const userProfile = remarks[user.id] || { role: '未設定', nickname: '名無し', created_at: '' };
 
-      // 各ワードがID、メール、権限、ニックネーム、登録日に含まれているかをチェック
       return searchWords.every((word) =>
         user.id.toLowerCase().includes(word) ||
         user.email.toLowerCase().includes(word) ||
@@ -110,11 +109,10 @@ export default function ListUsers() {
       );
     });
     setFilteredUsers(filtered);
-    setCurrentPage(1); // 検索クエリが変更されたときにページをリセット
+    setCurrentPage(1);
   }, [searchQuery, users, remarks]);
 
   useEffect(() => {
-    // `filteredUsers` が更新されたときに `currentPage` をリセット
     setCurrentPage(1);
   }, [filteredUsers]);
 
@@ -155,7 +153,6 @@ export default function ListUsers() {
                       <p className="font-semibold">ユーザーID: {user.id}</p>
                       <p>メール: {user.email}</p>
                       <p>ニックネーム: {remarks[user.id]?.nickname || '名無し'}</p>
-                      {/* <p>権限: {remarks[user.id]?.role || '未設定'}</p> */}
                       <p>登録日: {remarks[user.id]?.created_at || '未設定'}</p>
                       <label className="flex items-center space-x-2 text-red-400">
                       <input

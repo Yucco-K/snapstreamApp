@@ -12,7 +12,7 @@ import useAuth from "./useAuth";
 const inter = Inter({ subsets: ["latin"] });
 
 const metadata: Metadata = {
-  title: "Snap Stream",
+  title: "SnapStream",
   description: "動画共有アプリのホームページです",
 };
 
@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  useAuth(); // 認証チェックを追加
+  useAuth();
 
   return (
     <html lang="ja">
