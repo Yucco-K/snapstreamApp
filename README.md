@@ -13,10 +13,23 @@
 
 アプリケーションの動作デモは以下の動画でご確認いただけます：
 
-[![デモ動画](https://img.youtube.com/vi/kANELhViq7o/0.jpg)](https://youtu.be/kANELhViq7o)
+<table>
+  <tr>
+    <td>
+      <a href="https://youtu.be/kANELhViq7o">
+        <img src="https://img.youtube.com/vi/kANELhViq7o/0.jpg" alt="デモ動画③" width="240" />
+      </a>
+    </td>
+    <td width="24"></td> <!-- スペーサー -->
+    <td>
+      <a href="https://youtu.be/aRk_GW5FmKQ">
+        <img src="https://img.youtube.com/vi/aRk_GW5FmKQ/0.jpg" alt="デモ動画④" width="240" />
+      </a>
+    </td>
+  </tr>
+</table>
 
-[![デモ動画](https://img.youtube.com/vi/aRk_GW5FmKQ/0.jpg)](https://youtu.be/aRk_GW5FmKQ)
-
+--- 
 
 ### 機能要件
    1. 動画をストレージにアップロードして再生する機能（自分自身でアップロードしたファイルのみ削除可・自分の投稿のみ削除可・自分の投稿でなくても非表示設定可）。
