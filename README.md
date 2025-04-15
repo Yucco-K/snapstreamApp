@@ -16,7 +16,7 @@
 <table>
   <tr>
     <td>
-      <a href="https://youtu.be/kANELhViq7o">
+      <a href="https://youtu.be/IXlKbOB-UIM">
         <img src="https://img.youtube.com/vi/kANELhViq7o/0.jpg" alt="デモ動画③" width="240" />
       </a>
     </td>
