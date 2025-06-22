@@ -82,7 +82,10 @@
 **デプロイ**
 - Vercel
 
----　
+--- 
+
+### documents
+
 - [API仕様書](https://github.com/Yucco-K/snapstreamApp/blob/main/documents/API.md)
 - [ERD図](https://github.com/Yucco-K/snapstreamApp/blob/main/documents/ERD.md)
 - [要件定義](https://github.com/Yucco-K/snapstreamApp/blob/main/documents/requirements.md)
